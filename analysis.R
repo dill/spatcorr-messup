@@ -47,3 +47,27 @@ print(summary(b_xy))
 # as in paper, we have the same issue with the socioc effect!
 
 
+# what if we smooth socioc?
+# with space
+b_sms <- gam(observed~offset(log(expected)) + s(socioc, k=5) +
+                  s(mun, bs="mrf", xt=list(nb=nb), k=60),
+         data=dat, method="REML", family=poisson)
+
+print(summary(b_sms))
+
+
+# no space
+b_sm <- gam(observed~offset(log(expected)) + s(socioc, k=5),
+         data=dat, method="REML", family=poisson)
+
+print(summary(b_sm))
+
+
+par(mfrow=c(1,2))
+
+plot(b_sm, ylim=c(-0.3, 0.3), main="no spatial term")
+plot(b_sms, ylim=c(-0.3, 0.3), main="with spatial term")
+
+
+
+
